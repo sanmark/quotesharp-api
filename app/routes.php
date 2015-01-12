@@ -1,17 +1,28 @@
 <?php
 
-/*
-|--------------------------------------------------------------------------
-| Application Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register all of the routes for an application.
-| It's a breeze. Simply tell Laravel the URIs it should respond to
-| and give it the Closure to execute when that URI is requested.
-|
-*/
+date_default_timezone_set ( 'Asia/Colombo' ) ;
 
-Route::get('/', function()
+App::missing ( function ()
 {
-	return View::make('hello');
-});
+	return Response::json ( [API_MSG => 'Not Found' ] , 404 ) ;
+} ) ;
+
+foreach ( glob ( app_path () . '/routes/*.php' ) as $routeFile )
+{
+	include_once $routeFile ;
+}
+
+foreach ( glob ( app_path () . '/dictionaries/*.php' ) as $dictionaryFile )
+{
+	include_once $dictionaryFile ;
+}
+
+foreach ( glob ( app_path () . '/butlers/*.php' ) as $butlerFile )
+{
+	include_once $butlerFile ;
+}
+
+foreach ( glob ( app_path () . '/helpers/*.php' ) as $helperFile )
+{
+	include_once $helperFile ;
+}
