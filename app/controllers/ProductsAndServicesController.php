@@ -55,9 +55,18 @@ class ProductsAndServicesController extends BaseController
 			$newProductOrService -> price		 = $price ;
 			$newProductOrService -> details		 = $details ;
 			$newProductOrService -> parent_id	 = $parent ;
-			$newProductOrService -> save () ;
 
-			return Response::json ( [API_MSG => 'Product "' . $name . '" saved Successfully' ] , 200 ) ;
+			$result = $newProductOrService -> validateOnProductSave () ;
+
+			if ( is_null ( $result ) )
+			{
+				$newProductOrService -> save () ;
+
+				return Response::json ( [API_MSG => 'Product "' . $name . '" saved Successfully' ] , 200 ) ;
+			} else
+			{
+				return Response::json ( [API_MSG => $result ] , 406 ) ;
+			}
 		} catch ( Exception $ex )
 		{
 			return Response::json ( [

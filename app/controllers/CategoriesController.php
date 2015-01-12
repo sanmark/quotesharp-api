@@ -6,7 +6,7 @@ class CategoriesController extends BaseController
 	public function getCategories ()
 	{
 		$categoryies = Category::get () ;
-		
+
 		return Response::json ( [API_DATA => $categoryies ] , 200 ) ;
 	}
 
@@ -39,11 +39,20 @@ class CategoriesController extends BaseController
 			$newCategory -> details		 = $categoryDetails ;
 			$newCategory -> parent_id	 = $parentCategory ;
 
-			$newCategory -> save () ;
+			$result = $newCategory -> validateOnCategorySave () ;
+			if ( is_null ( $result ) )
+			{
+				$newCategory -> save () ;
 
-			return Response::json ( [
-					API_MSG => 'New category "' . $categoryName . '" saved successfully'
-					] , 200 ) ;
+				return Response::json ( [
+						API_MSG => 'New category "' . $categoryName . '" saved successfully'
+						] , 200 ) ;
+			} else
+			{
+				return Response::json ( [
+						API_MSG => $result
+						] , 406 ) ;
+			}
 		} catch ( Exception $exc )
 		{
 			return Response::json ( [

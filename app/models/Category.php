@@ -10,6 +10,27 @@ class Category extends Eloquent
 		$categories[ $maxIndex ] = ['id' => '0' , 'name' => 'Root Category' ] ;
 		return $categories ;
 	}
+	
+	public function validateOnCategorySave ()
+	{
+		$data = $this -> toArray () ;
+
+		$rules = [
+			'name' => [
+				'required' ,
+				'unique:categories'
+			]
+			] ;
+
+		$validator = Validator::make ( $data , $rules ) ;
+
+		if ( $validator -> fails () )
+		{
+			$message	 = $validator -> messages () ;
+			$response	 = $message -> all ();
+			return $response ;
+		}
+	}
 
 	public function getCategoriesArray ()
 	{

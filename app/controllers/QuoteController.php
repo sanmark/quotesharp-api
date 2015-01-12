@@ -19,6 +19,8 @@ class QuoteController extends BaseController
 		$newQuoteBasicDetails -> customer_address	 = $customerAddress ;
 		$newQuoteBasicDetails -> customer_address	 = $customerAddress ;
 		$newQuoteBasicDetails -> date				 = $date ;
+
+		$result = $newQuoteBasicDetails -> validateQuoteOnSave () ;
 		$newQuoteBasicDetails -> save () ;
 
 		$savedQuoteId = $newQuoteBasicDetails -> id ;
@@ -85,7 +87,7 @@ class QuoteController extends BaseController
 	{
 		try
 		{
-			$customersList = Quote::distinct(['customer_name'])->get ( ['customer_name' ] );
+			$customersList = Quote::distinct ( ['customer_name' ] ) -> get ( ['customer_name' ] ) ;
 
 			return Response::json ( [
 					API_DATA => $customersList
