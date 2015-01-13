@@ -107,7 +107,8 @@ return array (
 		'Illuminate\View\ViewServiceProvider' ,
 		'Illuminate\Workbench\WorkbenchServiceProvider' ,
 		'Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider' ,
-		'Sanmark\PhpHelpers\PhpHelpersServiceProvider'
+		'Sanmark\PhpHelpers\PhpHelpersServiceProvider',
+		'A2way\LaravelTenantMigrate\LaravelTenantMigrateServiceProvider'
 	) ,
 	/*
 	  |--------------------------------------------------------------------------
