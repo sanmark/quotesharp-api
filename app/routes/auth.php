@@ -1,6 +1,6 @@
 <?php
 
-Route::group ( ['prefix' => 'auth','before'=>'setOrganization' ] , function ()
+Route::group ( ['prefix' => 'auth'] , function ()
 {
 	Route::post ( '/login' , [
 		'as'	 => 'auth.login' ,
