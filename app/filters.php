@@ -51,11 +51,13 @@ Route::filter ( 'auth' , function()
 } ) ;
 Route::filter ( 'setOrganization' , function()
 {
-	
-	$authToken		 = Input::get ( 'authToken' ) ;
-	$organization	 = AuthSession::where ( 'auth_token' , '=' , $authToken ) -> first () ;
-	SessionButler::setOrganization ( $organization -> organization ) ;
-	ConfigButler::setTenantDb ( $organization -> organization ) ;
+
+	$authToken = Input::get ( 'authToken' ) ;
+	if ( ! is_null ( $authToken ) )
+	{
+		$organization = Session::get ( SESSION_ORGANIZATION ) ;
+		ConfigButler::setTenantDb ( $organization ) ;
+	}
 } ) ;
 
 
