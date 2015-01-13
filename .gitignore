@@ -2,6 +2,7 @@
 /vendor
 composer.phar
 composer.lock
+composer
 .env.*.php
 .env.php
 .DS_Store
@@ -15,3 +16,4 @@ Thumbs.db
 500.php
 500.shtml
 /app/config/config.php
+error_log
