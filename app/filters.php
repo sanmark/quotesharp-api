@@ -49,6 +49,14 @@ Route::filter ( 'auth' , function()
 		}
 	}
 } ) ;
+Route::filter ( 'setOrganization' , function()
+{
+	
+	$authToken		 = Input::get ( 'authToken' ) ;
+	$organization	 = AuthSession::where ( 'auth_token' , '=' , $authToken ) -> first () ;
+	SessionButler::setOrganization ( $organization -> organization ) ;
+	ConfigButler::setTenantDb ( $organization -> organization ) ;
+} ) ;
 
 
 Route::filter ( 'auth.basic' , function()

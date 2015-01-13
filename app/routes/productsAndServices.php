@@ -1,6 +1,6 @@
 <?php
 
-Route::group ( ['prefix' => 'products-and-services' ] , function ()
+Route::group ( ['prefix' => 'products-and-services','before'=>'setOrganization' ] , function ()
 {
 	Route::post ( '/save' , [
 		'as'	 => 'productsAndServices.save' ,

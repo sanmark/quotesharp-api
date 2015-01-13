@@ -39,6 +39,7 @@ class AuthController extends BaseController
 				$authSession							 = new AuthSession() ;
 				$authSession -> auth_token_expiry_time	 = date ( 'Y-m-d H:i:s' , time () + 7200 ) ;
 				$authSession -> auth_token				 = Hash::make ( $authSession -> auth_token_expiry_time . $user -> username ) ;
+				$authSession -> organization			 = $organization ;
 
 				$user -> authSessions () -> save ( $authSession ) ;
 
