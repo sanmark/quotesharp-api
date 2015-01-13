@@ -1,6 +1,6 @@
 <?php
 
-Route::group ( ['prefix' => 'categories' ] , function ()
+Route::group ( ['prefix' => 'categories','before'=>'setOrganization' ] , function ()
 {
 	Route::post ( '/save-new-category' , [
 		'as'	 => 'categories.saveNewCategory' ,

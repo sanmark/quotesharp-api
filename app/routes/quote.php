@@ -1,6 +1,6 @@
 <?php
 
-Route::group ( ['prefix' => 'quote' ] , function ()
+Route::group ( ['prefix' => 'quote','before'=>'setOrganization' ] , function ()
 {
 	Route::post ( '/save' , [
 		'as'	 => 'quote.save' ,
