@@ -65,17 +65,16 @@ class CategoriesController extends BaseController
 	{
 		$categoriesUpdateData = Input::get ( 'updateData' ) ;
 
-		foreach ( $categoriesUpdateData as $data )
-		{
-			$category				 = Category::find ( $data[ 'id' ] ) ;
-			$category -> name		 = $data[ 'name' ] ;
-			$category -> details	 = $data[ 'details' ] ;
-			$category -> parent_id	 = $data[ 'parent_id' ] ;
-			$category -> update () ;
-		}
+
+		$category				 = Category::find ( $categoriesUpdateData[ 'id' ] ) ;
+		$category -> name		 = $categoriesUpdateData[ 'name' ] ;
+		$category -> details	 = $categoriesUpdateData[ 'details' ] ;
+		$category -> parent_id	 = $categoriesUpdateData[ 'parent_id' ] ;
+		$category -> update () ;
+
 
 		return Response::json ( [
-				API_MSG => 'Categories updated successfully'
+				API_MSG => 'Category updated successfully'
 				] , 200 ) ;
 	}
 
