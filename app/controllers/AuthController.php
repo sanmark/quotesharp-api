@@ -46,7 +46,8 @@ class AuthController extends BaseController
 				return Response::json ( [
 						API_MSG			 => 'Login success' ,
 						API_AUTH_TOKEN	 => $authSession -> auth_token ,
-						'userId'		 => Auth::user () ,
+						'username'		 => Auth::user ()->username,
+						'organization'		 => $organization,
 						] , 200 ) ;
 			} else
 			{
