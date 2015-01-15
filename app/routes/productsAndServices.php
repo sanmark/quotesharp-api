@@ -11,6 +11,10 @@ Route::group ( ['prefix' => 'products-and-services','before'=>'setOrganization' 
 		'as'	 => 'productsAndServices.get' ,
 		'uses'	 => 'ProductsAndServicesController@get'
 	] ) ;
+	Route::post ( '/get-active-products-and-services' , [
+		'as'	 => 'productsAndServices.getActiveProductsAndServices' ,
+		'uses'	 => 'ProductsAndServicesController@getActiveProductsAndServices'
+	] ) ;
 	
 	Route::post ( '/update' , [
 		'as'	 => 'productsAndServices.update' ,

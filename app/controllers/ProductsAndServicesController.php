@@ -10,26 +10,31 @@ class ProductsAndServicesController extends BaseController
 		return Response::json ( [API_DATA => $productsAndServices ] , 200 ) ;
 	}
 
+	public function getActiveProductsAndServices()
+	{
+
+		$productsAndServices = ProductAndService::where ( 'is_active' , '=' , 1 ) -> get () ;
+		return Response::json ( [API_DATA => $productsAndServices ] , 200 ) ;
+	}
+
 	public function update ()
 	{
 		try
 		{
 			$productsAndServices = Input::get ( 'updateData' ) ;
 
-			foreach ( $productsAndServices as $product )
-			{
-				$updateProduct				 = ProductAndService::find ( $product[ 'id' ] ) ;
-				$updateProduct -> code		 = $product[ 'code' ] ;
-				$updateProduct -> name		 = $product[ 'name' ] ;
-				$updateProduct -> price		 = $product[ 'price' ] ;
-				$updateProduct -> details	 = $product[ 'details' ] ;
-				$updateProduct -> parent_id	 = $product[ 'parent_id' ] ;
+			$updateProduct				 = ProductAndService::find ( $productsAndServices[ 'id' ] ) ;
+			$updateProduct -> code		 = $productsAndServices[ 'code' ] ;
+			$updateProduct -> name		 = $productsAndServices[ 'name' ] ;
+			$updateProduct -> price		 = $productsAndServices[ 'price' ] ;
+			$updateProduct -> details	 = $productsAndServices[ 'details' ] ;
+			$updateProduct -> parent_id	 = $productsAndServices[ 'parent_id' ] ;
+			$updateProduct -> is_active	 = $productsAndServices[ 'is_active' ] ;
 
-				$updateProduct -> update () ;
-			}
+			$updateProduct -> update () ;
 
 			return Response::json ( [
-					API_MSG => 'Products and services updated successfully'
+					API_MSG => 'Product updated successfully'
 					] , 200 ) ;
 		} catch ( Exception $ex )
 		{
@@ -47,6 +52,7 @@ class ProductsAndServicesController extends BaseController
 		$price	 = Input::get ( 'productPrice' ) ;
 		$details = Input::get ( 'productDetails' ) ;
 		$parent	 = Input::get ( 'productParent' ) ;
+		$status	 = Input::get ( 'productStatus' ) ;
 		try
 		{
 			$newProductOrService				 = new ProductAndService() ;
@@ -55,6 +61,7 @@ class ProductsAndServicesController extends BaseController
 			$newProductOrService -> price		 = $price ;
 			$newProductOrService -> details		 = $details ;
 			$newProductOrService -> parent_id	 = $parent ;
+			$newProductOrService -> is_active	 = $status ;
 
 			$result = $newProductOrService -> validateOnProductSave () ;
 

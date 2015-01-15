@@ -97,7 +97,7 @@ class CategoriesController extends BaseController
 		} catch ( Exception $exc )
 		{
 			return Response::json ( [
-					API_MSG => $exc -> getMessage ()
+					API_MSG => [$exc -> getMessage ()]
 					] , 406 ) ;
 		}
 	}
