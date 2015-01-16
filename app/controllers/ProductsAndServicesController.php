@@ -3,27 +3,27 @@
 class ProductsAndServicesController extends BaseController
 {
 
-	public function get ()
+	public function getAllProductsAndServices ()
 	{
-
 		$productsAndServices = ProductAndService::get () ;
 		return Response::json ( [API_DATA => $productsAndServices ] , 200 ) ;
 	}
 
-	public function getActiveProductsAndServices()
+	public function getActiveProductsAndServices ()
 	{
 
-		$productsAndServices = ProductAndService::where ( 'is_active' , '=' , 1 ) -> get () ;
-		return Response::json ( [API_DATA => $productsAndServices ] , 200 ) ;
+		$activeProductsAndServices = ProductAndService::where ( 'is_active' , '=' , true ) -> get () ;
+		return Response::json ( [API_DATA => $activeProductsAndServices ] , 200 ) ;
 	}
 
-	public function update ()
+	public function updateProductOrService ()
 	{
 		try
 		{
 			$productsAndServices = Input::get ( 'updateData' ) ;
 
 			$updateProduct				 = ProductAndService::find ( $productsAndServices[ 'id' ] ) ;
+			$oldProductName				 = $updateProduct -> name ;
 			$updateProduct -> code		 = $productsAndServices[ 'code' ] ;
 			$updateProduct -> name		 = $productsAndServices[ 'name' ] ;
 			$updateProduct -> price		 = $productsAndServices[ 'price' ] ;
@@ -31,11 +31,20 @@ class ProductsAndServicesController extends BaseController
 			$updateProduct -> parent_id	 = $productsAndServices[ 'parent_id' ] ;
 			$updateProduct -> is_active	 = $productsAndServices[ 'is_active' ] ;
 
-			$updateProduct -> update () ;
 
-			return Response::json ( [
-					API_MSG => 'Product updated successfully'
-					] , 200 ) ;
+			$result = $updateProduct -> validateOnProductOrServiceUpdate () ;
+
+			if ( is_null ( $result ) )
+			{
+				$updateProduct -> update () ;
+
+				return Response::json ( [
+						API_MSG => ["Product '" . $oldProductName . "' updated successfully" ]
+						] , 200 ) ;
+			} else
+			{
+				return Response::json ( [API_MSG => $result ] , 406 ) ;
+			}
 		} catch ( Exception $ex )
 		{
 			return Response::json ( [
@@ -44,7 +53,7 @@ class ProductsAndServicesController extends BaseController
 		}
 	}
 
-	public function save ()
+	public function saveNewProductOrService ()
 	{
 
 		$code	 = Input::get ( 'productCode' ) ;
@@ -63,13 +72,13 @@ class ProductsAndServicesController extends BaseController
 			$newProductOrService -> parent_id	 = $parent ;
 			$newProductOrService -> is_active	 = $status ;
 
-			$result = $newProductOrService -> validateOnProductSave () ;
+			$result = $newProductOrService -> validateOnProductOrServiceSave () ;
 
 			if ( is_null ( $result ) )
 			{
 				$newProductOrService -> save () ;
 
-				return Response::json ( [API_MSG => 'Product "' . $name . '" saved Successfully' ] , 200 ) ;
+				return Response::json ( [API_MSG => ['Product "' . $name . '" saved Successfully' ] ] , 200 ) ;
 			} else
 			{
 				return Response::json ( [API_MSG => $result ] , 406 ) ;
@@ -92,7 +101,7 @@ class ProductsAndServicesController extends BaseController
 			$deleteProduct -> delete () ;
 
 			return Response::json ( [API_MSG =>
-					'Product deleted successfully'
+					['Product deleted successfully' ]
 					] , 200 ) ;
 		} catch ( Exception $ex )
 		{

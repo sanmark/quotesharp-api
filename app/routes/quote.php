@@ -2,13 +2,13 @@
 
 Route::group ( ['prefix' => 'quote','before'=>'setOrganization' ] , function ()
 {
-	Route::post ( '/save' , [
-		'as'	 => 'quote.save' ,
-		'uses'	 => 'QuoteController@save'
+	Route::post ( '/save-quote' , [
+		'as'	 => 'quote.saveQuote' ,
+		'uses'	 => 'QuoteController@saveQuote'
 	] ) ;
-	Route::post ( '/update' , [
-		'as'	 => 'quote.save' ,
-		'uses'	 => 'QuoteController@update'
+	Route::post ( '/update-quote' , [
+		'as'	 => 'quote.updateQuote' ,
+		'uses'	 => 'QuoteController@updateQuote'
 	] ) ;
 	Route::post ( '/get-quotes' , [
 		'as'	 => 'quote.getQuotes' ,

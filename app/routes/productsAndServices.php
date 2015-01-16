@@ -2,25 +2,25 @@
 
 Route::group ( ['prefix' => 'products-and-services','before'=>'setOrganization' ] , function ()
 {
-	Route::post ( '/save' , [
-		'as'	 => 'productsAndServices.save' ,
-		'uses'	 => 'ProductsAndServicesController@save'
+	Route::post ( '/save-new-product-or-service' , [
+		'as'	 => 'productsAndServices.saveNewProductOrService' ,
+		'uses'	 => 'ProductsAndServicesController@saveNewProductOrService'
 	] ) ;
 	
-	Route::post ( '/get' , [
-		'as'	 => 'productsAndServices.get' ,
-		'uses'	 => 'ProductsAndServicesController@get'
+	Route::post ( '/get-all-products-and-services' , [
+		'as'	 => 'productsAndServices.getAllProductsAndServices' ,
+		'uses'	 => 'ProductsAndServicesController@getAllProductsAndServices'
 	] ) ;
 	Route::post ( '/get-active-products-and-services' , [
 		'as'	 => 'productsAndServices.getActiveProductsAndServices' ,
 		'uses'	 => 'ProductsAndServicesController@getActiveProductsAndServices'
 	] ) ;
 	
-	Route::post ( '/update' , [
-		'as'	 => 'productsAndServices.update' ,
-		'uses'	 => 'ProductsAndServicesController@update'
+	Route::post ( '/update-product-or-service' , [
+		'as'	 => 'productsAndServices.updateProductOrService' ,
+		'uses'	 => 'ProductsAndServicesController@updateProductOrService'
 	] ) ;
-	Route::post ( '/delete-product' , [
+	Route::post ( '/delete-product-or-service' , [
 		'as'	 => 'productsAndServices.deleteProductOrService' ,
 		'uses'	 => 'ProductsAndServicesController@deleteProductOrService'
 	] ) ;
