@@ -10,7 +10,7 @@ class Category extends Eloquent
 		$categories[ $maxIndex ] = ['id' => '0' , 'name' => 'Root Category' ] ;
 		return $categories ;
 	}
-	
+
 	public function validateOnCategorySave ()
 	{
 		$data = $this -> toArray () ;
@@ -27,7 +27,7 @@ class Category extends Eloquent
 		if ( $validator -> fails () )
 		{
 			$message	 = $validator -> messages () ;
-			$response	 = $message -> all ();
+			$response	 = $message -> all () ;
 			return $response ;
 		}
 	}
@@ -69,6 +69,26 @@ class Category extends Eloquent
 				$childCategory -> update () ;
 				$productObject -> setParentCategoryForChildProducts ( $categoryId , $childCategory -> id ) ;
 			}
+		}
+	}
+
+	public function validateOnCategoryUpdate ()
+	{
+		$data = $this -> toArray () ;
+
+		$rules = [
+			'name' => [
+				'required'
+			]
+			] ;
+
+		$validator = Validator::make ( $data , $rules ) ;
+
+		if ( $validator -> fails () )
+		{
+			$message	 = $validator -> messages () ;
+			$response	 = $message -> all () ;
+			return $response ;
 		}
 	}
 

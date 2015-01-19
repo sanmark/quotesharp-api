@@ -13,7 +13,7 @@ class AuthController extends BaseController
 			if ( \Sanmark\PhpHelpers\NullHelper::isNullEmptyOrWhitespace ( $organization ) )
 			{
 				return Response::json ( [
-						API_MSG => "Please enter Organization code"
+						API_MSG => ["Please enter 'Organization'"]
 						] , 406 ) ;
 			}
 
@@ -24,7 +24,7 @@ class AuthController extends BaseController
 			if ( ! DatabaseHelper::hasDatabase ( $tenantDbName ) )
 			{
 				return Response::json ( [
-						API_MSG => 'Invalid Organization Code'
+						API_MSG => ['Invalid Organization']
 						] , 406 ) ;
 			}
 
@@ -44,15 +44,15 @@ class AuthController extends BaseController
 				$user -> authSessions () -> save ( $authSession ) ;
 
 				return Response::json ( [
-						API_MSG			 => 'Login success' ,
+						API_MSG			 => ['Login success'] ,
 						API_AUTH_TOKEN	 => $authSession -> auth_token ,
-						'username'		 => Auth::user ()->username,
-						'organization'		 => $organization,
+						'username'		 => Auth::user () -> username ,
+						'organization'	 => $organization ,
 						] , 200 ) ;
 			} else
 			{
 				return Response::json ( [
-						API_MSG => 'Login failed'
+						API_MSG => ['Login failed']
 						] , 401 ) ;
 			}
 		} catch ( Exception $ex )
@@ -66,7 +66,7 @@ class AuthController extends BaseController
 	public function logout ()
 	{
 		return Response::json ( [
-				API_MSG => 'Logout successfully.'
+				API_MSG => ['Logout successfully.']
 			] ) ;
 	}
 

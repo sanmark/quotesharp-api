@@ -6,17 +6,17 @@ Route::group ( ['prefix' => 'categories','before'=>'setOrganization' ] , functio
 		'as'	 => 'categories.saveNewCategory' ,
 		'uses'	 => 'CategoriesController@saveNewCategory'
 	] ) ;
-	Route::post ( '/update-categories' , [
-		'as'	 => 'categories.updateCategories' ,
-		'uses'	 => 'CategoriesController@updateCategories'
+	Route::post ( '/update-category' , [
+		'as'	 => 'categories.updateCategory' ,
+		'uses'	 => 'CategoriesController@updateCategory'
 	] ) ;
 	Route::post ( '/get-categories' , [
 		'as'	 => 'categories.getCategories' ,
 		'uses'	 => 'CategoriesController@getCategories'
 	] ) ;
-	Route::post ( '/get-categories-for-quote' , [
-		'as'	 => 'categories.getCategoriesForQuote' ,
-		'uses'	 => 'CategoriesController@getCategoriesForQuote'
+	Route::post ( '/get-categories-for-tree-view' , [
+		'as'	 => 'categories.getCategoriesForTreeView' ,
+		'uses'	 => 'CategoriesController@getCategoriesForTreeView'
 	] ) ;
 	Route::post ( '/get-categories-for-html-select' , [
 		'as'	 => 'categories.getCategoriesForHtmlSelect' ,

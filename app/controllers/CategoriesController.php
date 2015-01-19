@@ -5,9 +5,9 @@ class CategoriesController extends BaseController
 
 	public function getCategories ()
 	{
-		$categoryies = Category::get () ;
+		$categories = Category::get () ;
 
-		return Response::json ( [API_DATA => $categoryies ] , 200 ) ;
+		return Response::json ( [API_DATA => $categories ] , 200 ) ;
 	}
 
 	public function getCategoriesForHtmlSelect ()
@@ -19,7 +19,7 @@ class CategoriesController extends BaseController
 		return Response::json ( [API_DATA => $categories ] , 200 ) ;
 	}
 
-	public function getCategoriesForQuote ()
+	public function getCategoriesForTreeView ()
 	{
 		$categoriesObj	 = new Category() ;
 		$category		 = $categoriesObj -> getCategoriesArray () ;
@@ -45,7 +45,7 @@ class CategoriesController extends BaseController
 				$newCategory -> save () ;
 
 				return Response::json ( [
-						API_MSG => 'New category "' . $categoryName . '" saved successfully'
+						API_MSG => ['New category "' . $categoryName . '" saved successfully' ]
 						] , 200 ) ;
 			} else
 			{
@@ -61,21 +61,31 @@ class CategoriesController extends BaseController
 		}
 	}
 
-	public function updateCategories ()
+	public function updateCategory ()
 	{
-		$categoriesUpdateData = Input::get ( 'updateData' ) ;
+		$categoryData = Input::get ( 'updateData' ) ;
 
+		$category				 = Category::find ( $categoryData[ 'id' ] ) ;
+		$oldCategoryName		 = $category -> name ;
+		$category -> name		 = $categoryData[ 'name' ] ;
+		$category -> details	 = $categoryData[ 'details' ] ;
+		$category -> parent_id	 = $categoryData[ 'parent_id' ] ;
 
-		$category				 = Category::find ( $categoriesUpdateData[ 'id' ] ) ;
-		$category -> name		 = $categoriesUpdateData[ 'name' ] ;
-		$category -> details	 = $categoriesUpdateData[ 'details' ] ;
-		$category -> parent_id	 = $categoriesUpdateData[ 'parent_id' ] ;
-		$category -> update () ;
+		$result = $category -> validateOnCategoryUpdate () ;
 
+		if ( is_null ( $result ) )
+		{
+			$category -> update () ;
 
-		return Response::json ( [
-				API_MSG => 'Category updated successfully'
-				] , 200 ) ;
+			return Response::json ( [
+					API_MSG => [$oldCategoryName . ' updated successfully' ]
+					] , 200 ) ;
+		} else
+		{
+			return Response::json ( [
+					API_MSG => $result
+					] , 406 ) ;
+		}
 	}
 
 	public function deleteCategory ()
@@ -92,12 +102,12 @@ class CategoriesController extends BaseController
 			$category -> delete () ;
 
 			return Response::json ( [
-					API_MSG => 'Category "' . $category -> name . '" deleted successfully'
+					API_MSG => ['Category "' . $category -> name . '" deleted successfully' ]
 					] , 200 ) ;
 		} catch ( Exception $exc )
 		{
 			return Response::json ( [
-					API_MSG => [$exc -> getMessage ()]
+					API_MSG => [$exc -> getMessage () ]
 					] , 406 ) ;
 		}
 	}

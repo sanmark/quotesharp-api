@@ -3,7 +3,7 @@
 class QuoteController extends BaseController
 {
 
-	public function save ()
+	public function saveQuote ()
 	{
 		$customerName		 = Input::get ( 'customer_name' ) ;
 		$customerTelephone	 = Input::get ( 'customer_telephone' ) ;
@@ -13,17 +13,23 @@ class QuoteController extends BaseController
 		$quoteData			 = Input::get ( 'quoteData' ) ;
 
 		$newQuoteBasicDetails						 = new Quote() ;
-		$newQuoteBasicDetails -> printed_quote_id	 = $printedId ;
 		$newQuoteBasicDetails -> customer_name		 = $customerName ;
 		$newQuoteBasicDetails -> customer_telephone	 = $customerTelephone ;
 		$newQuoteBasicDetails -> customer_address	 = $customerAddress ;
-		$newQuoteBasicDetails -> customer_address	 = $customerAddress ;
 		$newQuoteBasicDetails -> date				 = $date ;
+		$newQuoteBasicDetails -> printed_quote_id	 = $printedId ;
 
-		$result = $newQuoteBasicDetails -> validateQuoteOnSave () ;
-		$newQuoteBasicDetails -> save () ;
+		$result = $newQuoteBasicDetails -> validateQuoteBasicDetailsOnSave () ;
 
-		$savedQuoteId = $newQuoteBasicDetails -> id ;
+		if ( is_null ( $result ) )
+		{
+			$newQuoteBasicDetails -> save () ;
+
+			$savedQuoteId = $newQuoteBasicDetails -> id ;
+		} else
+		{
+			return Response::json ( [API_MSG => $result ] , 406 ) ;
+		}
 
 		foreach ( $quoteData as $product )
 		{
@@ -35,11 +41,10 @@ class QuoteController extends BaseController
 			$newQuoteDetails -> save () ;
 		}
 
-
-		return Response::json ( [API_MSG => 'Quote saved successfully' ] , 200 ) ;
+		return Response::json ( [API_MSG => ['Quote saved successfully' ] ] , 200 ) ;
 	}
 
-	public function update ()
+	public function updateQuote ()
 	{
 		$quoteId			 = Input::get ( 'edit_quote_id' ) ;
 		$customerName		 = Input::get ( 'customer_name' ) ;
@@ -53,7 +58,6 @@ class QuoteController extends BaseController
 		$editQuoteBasicDetails -> printed_quote_id	 = $printedId ;
 		$editQuoteBasicDetails -> customer_name		 = $customerName ;
 		$editQuoteBasicDetails -> customer_telephone = $customerTelephone ;
-		$editQuoteBasicDetails -> customer_address	 = $customerAddress ;
 		$editQuoteBasicDetails -> customer_address	 = $customerAddress ;
 		$editQuoteBasicDetails -> date				 = $date ;
 		$editQuoteBasicDetails -> update () ;
@@ -80,7 +84,7 @@ class QuoteController extends BaseController
 			}
 		}
 
-		return Response::json ( [API_MSG => 'Quote data Successfully updated' ] , 200 ) ;
+		return Response::json ( [API_MSG => ['Quote data Successfully updated' ] ] , 200 ) ;
 	}
 
 	public function getCustomers ()
@@ -102,7 +106,6 @@ class QuoteController extends BaseController
 
 	public function getQuotes ()
 	{
-
 		$quoteData = Quote::get () ;
 		return Response::json ( [API_DATA => $quoteData ] , 200 ) ;
 	}
@@ -115,7 +118,7 @@ class QuoteController extends BaseController
 		$quote -> delete () ;
 
 		return Response::json ( [
-				API_MSG => 'Quote id ' . $quoteId . ' deleted successfully'
+				API_MSG => ['Quote id ' . $quoteId . ' deleted successfully' ]
 				] , 200 ) ;
 	}
 

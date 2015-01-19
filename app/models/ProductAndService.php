@@ -16,25 +16,25 @@ class ProductAndService extends Eloquent
 		}
 	}
 
-	public function validateOnProductSave ()
+	public function validateOnProductOrServiceSave ()
 	{
 		$data = $this -> toArray () ;
 
 		$rules = [
-			'code' => [
+			'code'		 => [
 				'required' ,
 				'unique:products_and_services'
-			],
-			'name' => [
+			] ,
+			'name'		 => [
 				'required' ,
 				'unique:products_and_services'
-			],
-			'price'=>[
-				'required',
+			] ,
+			'price'		 => [
+				'required' ,
 				'numeric'
-			],
-			'parent_id'=>[
-				'required',
+			] ,
+			'parent_id'	 => [
+				'required' ,
 			]
 			] ;
 
@@ -43,7 +43,37 @@ class ProductAndService extends Eloquent
 		if ( $validator -> fails () )
 		{
 			$message	 = $validator -> messages () ;
-			$response	 = $message -> all();
+			$response	 = $message -> all () ;
+			return $response ;
+		}
+	}
+
+	public function validateOnProductOrServiceUpdate ()
+	{
+		$data = $this -> toArray () ;
+
+		$rules = [
+			'code'		 => [
+				'required' ,
+			] ,
+			'name'		 => [
+				'required' ,
+			] ,
+			'price'		 => [
+				'required' ,
+				'numeric'
+			] ,
+			'parent_id'	 => [
+				'required' ,
+			]
+			] ;
+
+		$validator = Validator::make ( $data , $rules ) ;
+
+		if ( $validator -> fails () )
+		{
+			$message	 = $validator -> messages () ;
+			$response	 = $message -> all () ;
 			return $response ;
 		}
 	}
