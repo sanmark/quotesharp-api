@@ -14,6 +14,10 @@ Route::group ( ['prefix' => 'quote','before'=>'setOrganization' ] , function ()
 		'as'	 => 'quote.getQuotes' ,
 		'uses'	 => 'QuoteController@getQuotes'
 	] ) ;
+	Route::post ( '/get-quotes-total' , [
+		'as'	 => 'quote.getQuotesTotal' ,
+		'uses'	 => 'QuoteController@getQuotesTotal'
+	] ) ;
 	Route::post ( '/get-basic-quote-data' , [
 		'as'	 => 'quote.getBasicQuoteData' ,
 		'uses'	 => 'QuoteController@getBasicQuoteData'

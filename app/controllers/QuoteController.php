@@ -107,7 +107,27 @@ class QuoteController extends BaseController
 	public function getQuotes ()
 	{
 		$quoteData = Quote::get () ;
+
 		return Response::json ( [API_DATA => $quoteData ] , 200 ) ;
+	}
+
+	public function getQuotesTotal ()
+	{
+		$quotes			 = Quote::get () ;
+		$quoteTotalArray = [ ] ;
+		foreach ( $quotes as $quote )
+		{
+			$quoteDetails	 = QuoteDetail::where ( 'quote_id' , '=' , $quote -> id ) -> get () ;
+			$rowTotal		 = 0 ;
+			foreach ( $quoteDetails as $quoteDetail )
+			{
+				$price		 = $quoteDetail -> price ;
+				$quantity	 = $quoteDetail -> quantity ;
+				$rowTotal += $price * $quantity ;
+			}
+			$quoteTotalArray[ $quote -> id ] = $rowTotal ;
+		}
+		return Response::json ( [API_DATA => $quoteTotalArray ] , 200 ) ;
 	}
 
 	public function deleteQuote ()
