@@ -62,18 +62,22 @@ class QuoteController extends BaseController
 		$editQuoteBasicDetails -> date				 = $date ;
 		$editQuoteBasicDetails -> update () ;
 
-		$editQuoteData = QuoteDetail::where ( 'quote_id' , '=' , $quoteId ) ;
-
 		foreach ( $quoteData as $product )
 		{
-			$editQuoteData = $editQuoteData -> where ( 'product_or_service_id' , '=' , $product[ 'id' ] ) -> first () ;
+			$editQuoteData = QuoteDetail::where ( 'quote_id' , '=' , $quoteId ) -> where ( 'product_or_service_id' , '=' , $product[ 'id' ] ) -> first () ;
 			if ( count ( $editQuoteData ) == 1 )
 			{
-				$editQuoteData -> product_or_service_id	 = $product[ 'id' ] ;
-				$editQuoteData -> price					 = $product[ 'price' ] ;
-				$editQuoteData -> quantity				 = $product[ 'quantity' ] ;
-				$editQuoteData -> update () ;
-			} elseif ( count ( $editQuoteData ) == 0 )
+				if ( $product[ 'quantity' ] == "" )
+				{
+					$editQuoteData -> delete () ;
+				} else
+				{
+					$editQuoteData -> product_or_service_id	 = $product[ 'id' ] ;
+					$editQuoteData -> price					 = $product[ 'price' ] ;
+					$editQuoteData -> quantity				 = $product[ 'quantity' ] ;
+					$editQuoteData -> update () ;
+				}
+			} else
 			{
 				$newQuoteData							 = new QuoteDetail() ;
 				$newQuoteData -> quote_id				 = $quoteId ;
