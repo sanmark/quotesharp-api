@@ -62,14 +62,17 @@ class QuoteController extends BaseController
 		$editQuoteBasicDetails -> date				 = $date ;
 		$editQuoteBasicDetails -> update () ;
 
+		$productsExists	 = QuoteDetail::where ( 'quote_id' , '=' , $quoteId ) -> lists ( 'product_or_service_id' ) ;
+		$newQuoteData	 = new QuoteDetail() ;
+
 		foreach ( $quoteData as $product )
 		{
 			$editQuoteData = QuoteDetail::where ( 'quote_id' , '=' , $quoteId ) -> where ( 'product_or_service_id' , '=' , $product[ 'id' ] ) -> first () ;
-			if ( count ( $editQuoteData ) == 1 )
+			if ( in_array ( $product[ 'id' ] , $productsExists ) )
 			{
-				if ( $product[ 'quantity' ] == "" )
+				if ( $product[ 'quantity' ] == "" || $product[ 'quantity' ] == NULL )
 				{
-					$editQuoteData -> delete () ;
+					QuoteDetail::where ( 'quote_id' , '=' , $quoteId ) -> where ( 'product_or_service_id' , '=' , $product[ 'id' ] ) -> delete () ;
 				} else
 				{
 					$editQuoteData -> product_or_service_id	 = $product[ 'id' ] ;
@@ -77,18 +80,20 @@ class QuoteController extends BaseController
 					$editQuoteData -> quantity				 = $product[ 'quantity' ] ;
 					$editQuoteData -> update () ;
 				}
-			} else
+			} elseif ( ! in_array ( $product[ 'id' ] , $productsExists ) )
 			{
-				$newQuoteData							 = new QuoteDetail() ;
-				$newQuoteData -> quote_id				 = $quoteId ;
-				$newQuoteData -> product_or_service_id	 = $product[ 'id' ] ;
-				$newQuoteData -> price					 = $product[ 'price' ] ;
-				$newQuoteData -> quantity				 = $product[ 'quantity' ] ;
-				$newQuoteData -> save () ;
+				if ( $product[ 'quantity' ] != 0 )
+				{
+					$newQuoteData -> quote_id				 = $quoteId ;
+					$newQuoteData -> product_or_service_id	 = $product[ 'id' ] ;
+					$newQuoteData -> price					 = $product[ 'price' ] ;
+					$newQuoteData -> quantity				 = $product[ 'quantity' ] ;
+					$newQuoteData -> save () ;
+				}
 			}
 		}
 
-		return Response::json ( [API_MSG => ['Quote data Successfully updated' ] ] , 200 ) ;
+		return Response::json ( [API_MSG => ['Quote updated successfully' ] ] , 200 ) ;
 	}
 
 	public function getCustomers ()
