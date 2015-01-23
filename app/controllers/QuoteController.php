@@ -62,29 +62,38 @@ class QuoteController extends BaseController
 		$editQuoteBasicDetails -> date				 = $date ;
 		$editQuoteBasicDetails -> update () ;
 
-		$editQuoteData = QuoteDetail::where ( 'quote_id' , '=' , $quoteId ) ;
+		$productsExists	 = QuoteDetail::where ( 'quote_id' , '=' , $quoteId ) -> lists ( 'product_or_service_id' ) ;
+		$newQuoteData	 = new QuoteDetail() ;
 
 		foreach ( $quoteData as $product )
 		{
-			$editQuoteData = $editQuoteData -> where ( 'product_or_service_id' , '=' , $product[ 'id' ] ) -> first () ;
-			if ( count ( $editQuoteData ) == 1 )
+			$editQuoteData = QuoteDetail::where ( 'quote_id' , '=' , $quoteId ) -> where ( 'product_or_service_id' , '=' , $product[ 'id' ] ) -> first () ;
+			if ( in_array ( $product[ 'id' ] , $productsExists ) )
 			{
-				$editQuoteData -> product_or_service_id	 = $product[ 'id' ] ;
-				$editQuoteData -> price					 = $product[ 'price' ] ;
-				$editQuoteData -> quantity				 = $product[ 'quantity' ] ;
-				$editQuoteData -> update () ;
-			} elseif ( count ( $editQuoteData ) == 0 )
+				if ( $product[ 'quantity' ] == "" || $product[ 'quantity' ] == NULL )
+				{
+					QuoteDetail::where ( 'quote_id' , '=' , $quoteId ) -> where ( 'product_or_service_id' , '=' , $product[ 'id' ] ) -> delete () ;
+				} else
+				{
+					$editQuoteData -> product_or_service_id	 = $product[ 'id' ] ;
+					$editQuoteData -> price					 = $product[ 'price' ] ;
+					$editQuoteData -> quantity				 = $product[ 'quantity' ] ;
+					$editQuoteData -> update () ;
+				}
+			} elseif ( ! in_array ( $product[ 'id' ] , $productsExists ) )
 			{
-				$newQuoteData							 = new QuoteDetail() ;
-				$newQuoteData -> quote_id				 = $quoteId ;
-				$newQuoteData -> product_or_service_id	 = $product[ 'id' ] ;
-				$newQuoteData -> price					 = $product[ 'price' ] ;
-				$newQuoteData -> quantity				 = $product[ 'quantity' ] ;
-				$newQuoteData -> save () ;
+				if ( $product[ 'quantity' ] != 0 )
+				{
+					$newQuoteData -> quote_id				 = $quoteId ;
+					$newQuoteData -> product_or_service_id	 = $product[ 'id' ] ;
+					$newQuoteData -> price					 = $product[ 'price' ] ;
+					$newQuoteData -> quantity				 = $product[ 'quantity' ] ;
+					$newQuoteData -> save () ;
+				}
 			}
 		}
 
-		return Response::json ( [API_MSG => ['Quote data Successfully updated' ] ] , 200 ) ;
+		return Response::json ( [API_MSG => ['Quote updated successfully' ] ] , 200 ) ;
 	}
 
 	public function getCustomers ()

@@ -19,7 +19,7 @@ class AddIsActiveColumn extends Migration
 	{
 		Schema::table ( 'products_and_services' , function($t)
 		{
-			$t -> dropColumn ('is_active') ;
+			$t -> dropColumn ( 'is_active' ) ;
 		} ) ;
 	}
 
