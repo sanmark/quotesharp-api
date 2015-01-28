@@ -18,18 +18,24 @@ class ProductsAndServicesController extends BaseController
 
 	public function updateProductOrService ()
 	{
+		$id		 = Input::get ( 'productId' ) ;
+		$code	 = Input::get ( 'productCode' ) ;
+		$name	 = Input::get ( 'productName' ) ;
+		$price	 = Input::get ( 'productPrice' ) ;
+		$details = Input::get ( 'productDetails' ) ;
+		$parent	 = Input::get ( 'productParent' ) ;
+		$status	 = Input::get ( 'productStatus' ) ;
+		
 		try
 		{
-			$productsAndServices = Input::get ( 'updateData' ) ;
-
-			$updateProduct				 = ProductAndService::find ( $productsAndServices[ 'id' ] ) ;
+			$updateProduct				 = ProductAndService::find ( $id ) ;
 			$oldProductName				 = $updateProduct -> name ;
-			$updateProduct -> code		 = $productsAndServices[ 'code' ] ;
-			$updateProduct -> name		 = $productsAndServices[ 'name' ] ;
-			$updateProduct -> price		 = $productsAndServices[ 'price' ] ;
-			$updateProduct -> details	 = $productsAndServices[ 'details' ] ;
-			$updateProduct -> parent_id	 = $productsAndServices[ 'parent_id' ] ;
-			$updateProduct -> is_active	 = $productsAndServices[ 'is_active' ] ;
+			$updateProduct -> code		 = $code ;
+			$updateProduct -> name		 = $name ;
+			$updateProduct -> price		 = $price ;
+			$updateProduct -> details	 = $details ;
+			$updateProduct -> parent_id	 = $parent ;
+			$updateProduct -> is_active	 = $status ;
 
 
 			$result = $updateProduct -> validateOnProductOrServiceUpdate () ;
