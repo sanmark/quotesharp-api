@@ -19,6 +19,9 @@ class Category extends Eloquent
 			'name' => [
 				'required' ,
 				'unique:categories'
+			],
+			'parent_id'=>[
+				'required'
 			]
 			] ;
 
