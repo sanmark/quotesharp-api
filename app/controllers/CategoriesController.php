@@ -65,6 +65,11 @@ class CategoriesController extends BaseController
 	{
 		$categoryData = Input::get ( 'updateData' ) ;
 
+		if ( ! isset ( $categoryData[ 'name' ] ) )
+		{
+			$categoryData[ 'name' ] = "" ;
+		}
+
 		$category				 = Category::find ( $categoryData[ 'id' ] ) ;
 		$oldCategoryName		 = $category -> name ;
 		$category -> name		 = $categoryData[ 'name' ] ;
@@ -73,12 +78,13 @@ class CategoriesController extends BaseController
 
 		$result = $category -> validateOnCategoryUpdate () ;
 
+
 		if ( is_null ( $result ) )
 		{
 			$category -> update () ;
 
 			return Response::json ( [
-					API_MSG => [$oldCategoryName . ' updated successfully' ]
+					API_MSG => ["'" . $oldCategoryName . "' category updated successfully" ]
 					] , 200 ) ;
 		} else
 		{
