@@ -41,7 +41,7 @@ class QuoteController extends BaseController
 			$newQuoteDetails -> save () ;
 		}
 
-		return Response::json ( [API_MSG => ['Quote saved successfully' ] ] , 200 ) ;
+		return Response::json ( [API_MSG => ["Quote saved successfully" ] ] , 200 ) ;
 	}
 
 	public function updateQuote ()
@@ -60,7 +60,17 @@ class QuoteController extends BaseController
 		$editQuoteBasicDetails -> customer_telephone = $customerTelephone ;
 		$editQuoteBasicDetails -> customer_address	 = $customerAddress ;
 		$editQuoteBasicDetails -> date				 = $date ;
-		$editQuoteBasicDetails -> update () ;
+
+		$result = $editQuoteBasicDetails -> validateQuoteBasicDetailsOnUpdate () ;
+
+		if ( is_null ( $result ) )
+		{
+			$editQuoteBasicDetails -> update () ;
+		} else
+		{
+			return Response::json ( [API_MSG => $result ] , 406 ) ;
+		}
+
 
 		$productsExists	 = QuoteDetail::where ( 'quote_id' , '=' , $quoteId ) -> lists ( 'product_or_service_id' ) ;
 		$newQuoteData	 = new QuoteDetail() ;
