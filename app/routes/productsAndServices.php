@@ -24,5 +24,9 @@ Route::group ( ['prefix' => 'products-and-services','before'=>'setOrganization' 
 		'as'	 => 'productsAndServices.deleteProductOrService' ,
 		'uses'	 => 'ProductsAndServicesController@deleteProductOrService'
 	] ) ;
+	Route::post ( '/get-all-products-and-services-for-edit-mode' , [
+		'as'	 => 'productsAndServices.getAllProductsAndServicesForEditMode' ,
+		'uses'	 => 'ProductsAndServicesController@getAllProductsAndServicesForEditMode'
+	] ) ;
 } ) ;
 

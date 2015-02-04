@@ -2,7 +2,11 @@
 
 class ProductsAndServicesController extends BaseController
 {
-
+	public function getAllProductsAndServicesForEditMode()
+	{
+		return "fjsgjfg";
+	}
+	
 	public function getAllProductsAndServices ()
 	{
 		$productsAndServices = ProductAndService::get () ;
