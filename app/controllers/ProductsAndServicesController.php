@@ -2,11 +2,23 @@
 
 class ProductsAndServicesController extends BaseController
 {
-	public function getAllProductsAndServicesForEditMode()
+
+	public function getAllProductsAndServicesForEditMode ()
 	{
-		return "fjsgjfg";
+		$quoteId							 = Input::get ( 'quote_id' ) ;
+		$quoteProductIds					 = QuoteDetail::where ( 'quote_id' , '=' , $quoteId ) -> lists ( 'product_or_service_id' ) ;
+		$inactiveProductsAndServices		 = ProductAndService::where ( 'is_active' , '=' , TRUE ) -> lists ( 'id' ) ;
+		$editModeProductIdsWithDuplicates	 = array_merge ( $quoteProductIds , $inactiveProductsAndServices ) ;
+		$editModeProductIds					 = array_unique ( $editModeProductIdsWithDuplicates ) ;
+		$productsForEditMode				 = [ ] ;
+		foreach ( $editModeProductIds as $id )
+		{
+			$productsForEditMode[] = ProductAndService::find ( $id ) ;
+		}
+		
+		return Response::json ( [API_DATA => $productsForEditMode ] , 200 ) ;
 	}
-	
+
 	public function getAllProductsAndServices ()
 	{
 		$productsAndServices = ProductAndService::get () ;
@@ -29,7 +41,7 @@ class ProductsAndServicesController extends BaseController
 		$details = Input::get ( 'productDetails' ) ;
 		$parent	 = Input::get ( 'productParent' ) ;
 		$status	 = Input::get ( 'productStatus' ) ;
-		
+
 		try
 		{
 			$updateProduct				 = ProductAndService::find ( $id ) ;
